@@ -57,7 +57,7 @@ export default fp(async (fastify: FastifyInstance) => {
   const pathToMethod = path.join(__dirname, "../methods/");
   const data = fs.readdirSync(pathToMethod);
   data.forEach(async (method: string) => {
-    const nameOfMethod = method.split(".")[0];
+    const nameOfMethod = path.parse(path.join(pathToMethod, method)).name;
     handler[nameOfMethod] = await import(pathToMethod + method);
   });
 
@@ -75,6 +75,7 @@ export default fp(async (fastify: FastifyInstance) => {
       const ajv = new Ajv({ allErrors: true });
       const validate = ajv.compile(schema);
       const valid = validate(params);
+
       if (!valid && validate && validate.errors) {
         const errors = filterErrors(validate.errors);
         throw new InvalidParameters(errors as any);
@@ -86,6 +87,7 @@ export default fp(async (fastify: FastifyInstance) => {
         ...(request.body as JsonRpcPayloadRequest),
         ip: request.ip,
         headers: request.headers,
+        language: request.language,
       },
       fastify
     );

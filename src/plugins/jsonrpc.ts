@@ -12,6 +12,7 @@ export interface JsonRpcRequest<T> {
   params: T;
   ip: string;
   headers: IncomingHttpHeaders;
+  language: string;
 }
 
 export default fp(async (fastify: FastifyInstance) => {
