@@ -4,6 +4,7 @@ import cors from "@fastify/cors";
 import multipart from "@fastify/multipart";
 import jsonrpc from "./plugins/jsonrpc";
 import router from "./plugins/router";
+import decorators from "./plugins/decorators";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -17,6 +18,7 @@ app
   .decorate("config", config)
   .register(cors, { origin: "*", credentials: true })
   .register(multipart)
+  .register(decorators)
   .register(jsonrpc)
   .register(router);
 
