@@ -6,6 +6,7 @@ import jsonrpc from "./plugins/jsonrpc";
 import router from "./plugins/router";
 import decorators from "./plugins/decorators";
 import authorization from "./plugins/authorization";
+import prisma from "./plugins/prisma";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -20,6 +21,7 @@ app
   .register(cors, { origin: "*", credentials: true })
   .register(multipart)
   .register(decorators)
+  .register(prisma)
   .register(authorization)
   .register(jsonrpc)
   .register(router);

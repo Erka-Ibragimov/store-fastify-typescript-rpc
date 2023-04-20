@@ -20,7 +20,7 @@ export default fp(async (fastify) => {
       return null;
     };
 
-    fastify.authorize = async () => { 
+    fastify.authorize = async () => {
       const token = getToken();
       if (!token) {
         throw new JsonRpcError("Not authorized");
