@@ -2,6 +2,7 @@ import fastify, { FastifyInstance, FastifyRequest } from "fastify";
 import config from "./config";
 import cors from "@fastify/cors";
 import multipart from "@fastify/multipart";
+import redis from "@fastify/redis";
 import jsonrpc from "./plugins/jsonrpc";
 import router from "./plugins/router";
 import decorators from "./plugins/decorators";
@@ -24,6 +25,7 @@ app
   .register(prisma)
   .register(authorization)
   .register(jsonrpc)
+  .register(redis, config.database.redis)
   .register(router);
 
 app.post("*", async (request: FastifyRequest) => app.router(request));

@@ -10,6 +10,14 @@ export default {
       url: process.env.REDIS_URL,
     },
   },
-  port:process.env.PORT,
-  host:process.env.HOST
+  port: process.env.PORT,
+  host: process.env.HOST,
+  token: {
+    expiresIn: 1800,
+    key: process.env.TOKEN_SECRET,
+  },
+  otp: {
+    expiresIn: 60,
+    attempts: 3,
+  },
 };
