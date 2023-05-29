@@ -15,17 +15,14 @@ export const schema = Type.Object({
 
 type Params = Static<typeof schema>;
 
-export default async (
-  { params }: JsonRpcRequest<Params>,
-  { config, prisma, authorize }: FastifyInstance
-) => {
+export default async ({ params }: JsonRpcRequest<Params>, { config, prisma, authorize }: FastifyInstance) => {
   const user = await authorize();
   const { type, brand, image, ...other } = params;
 
   let pathToImage;
   const nameImage = cuid();
   if (image) {
-    pathToImage = await saveImage(image, nameImage);
+    pathToImage = await saveImage(image, nameImage, "devices", user.userId);
   }
 
   const typeDevice = await prisma.type.create({
@@ -43,7 +40,7 @@ export default async (
   const device = await prisma.device.create({
     data: {
       ...other,
-      pathImg: `${nameImage}.png`,
+      pathImg: pathToImage,
       devices: {
         create: {
           basket: { connect: { id: user.user.basket.id } },

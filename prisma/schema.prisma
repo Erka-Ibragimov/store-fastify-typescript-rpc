@@ -16,6 +16,7 @@ model User {
   surname     String?   @db.VarChar(255)
   username    String?   @unique @db.VarChar(30)
   password    String?   @db.VarChar(255)
+  photoPath   String?   @db.VarChar(255)
   phoneNumber String?   @unique @db.VarChar(30)
   isAdmin     Boolean   @default(false)
   role        String    @default("USER")
@@ -55,7 +56,7 @@ model Device {
   name       String         @db.VarChar(255)
   price      String         @db.VarChar(255)
   rate       Int            @db.Integer()
-  pathImg    String?         @db.VarChar(255)
+  pathImg    String?        @db.VarChar(255)
   devices    BasketDevice[]
   deviceInfo DeviceInfo[]
   rating     Rating[]

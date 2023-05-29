@@ -4,6 +4,8 @@ import { FastifyInstance } from "fastify";
 import { JsonRpcError } from "json-rpc-protocol";
 import { createToken, generateCode, hash } from "../services/security";
 import { addSeconds } from "date-fns";
+import cuid from "cuid";
+import { saveImage } from "../services/image";
 
 export const schema = Type.Object({
   name: Type.String(),
@@ -16,10 +18,7 @@ export const schema = Type.Object({
 
 export type Params = Static<typeof schema>;
 
-export default async (
-  { params }: JsonRpcRequest<Params>,
-  { config, prisma, redis }: FastifyInstance
-) => {
+export default async ({ params }: JsonRpcRequest<Params>, { config, prisma, redis }: FastifyInstance) => {
   if (!params.username && !params.phoneNumber) {
     throw new JsonRpcError("Need username or phoneNumber");
   }
@@ -60,15 +59,11 @@ export default async (
     const newOtp = {
       code: generateCode(),
       expiresIn: config.otp.expiresIn,
-      expiresAt:
-        config.otp.expiresIn && addSeconds(new Date(), config.otp.expiresIn),
+      expiresAt: config.otp.expiresIn && addSeconds(new Date(), config.otp.expiresIn),
       attempts: config.otp.attempts,
     };
     await redis.hset(`otp:register:${params.phoneNumber}`, newOtp);
-    await redis.expire(
-      `otp:register:${params.phoneNumber}`,
-      config.otp.expiresIn
-    );
+    await redis.expire(`otp:register:${params.phoneNumber}`, config.otp.expiresIn);
     return newOtp;
   }
 

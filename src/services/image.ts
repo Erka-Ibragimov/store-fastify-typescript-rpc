@@ -2,10 +2,7 @@ import sharp from "sharp";
 import { existsSync, mkdirSync } from "fs";
 import path from "path";
 
-export const saveImage = async (
-  imageBase64: string | undefined,
-  name: string
-) => {
+export const saveImage = async (imageBase64: string | undefined, name: string, type: string, userId: string) => {
   if (!imageBase64) {
     return null;
   }
@@ -14,10 +11,25 @@ export const saveImage = async (
     if (!existsSync(pathToPublic)) {
       mkdirSync(pathToPublic);
     }
-    const pathToImage = path.join(pathToPublic, "images");
+
+    let pathToType;
+
+    if (type === "device") {
+      pathToType = path.join(pathToPublic, "devices");
+    } else {
+      pathToType = path.join(pathToPublic, "users");
+    }
+
+    if (!existsSync(pathToType)) {
+      mkdirSync(pathToType);
+    }
+
+    const pathToImage = path.join(pathToType, userId);
+
     if (!existsSync(pathToImage)) {
       mkdirSync(pathToImage);
     }
+
     const nameImage = path.join(pathToImage, name) + ".png";
 
     const uri = imageBase64.split(";base64,").pop();
