@@ -56,7 +56,9 @@ export default fp(async (fastify) => {
       if (fastify.config.token.expiresIn) {
         await fastify.prisma.session.update({
           data: {
-            expiresAt: session.expiresAt && addSeconds(new Date(), fastify.config.token.expiresIn),
+            expiresAt:
+              session.expiresAt &&
+              addSeconds(new Date(), fastify.config.token.expiresIn),
           },
           where: { id: session.id },
         });

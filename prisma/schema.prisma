@@ -53,9 +53,10 @@ model BasketDevice {
 
 model Device {
   id         String         @id @default(cuid()) @db.VarChar(30)
+  staticId   Int?
   name       String         @db.VarChar(255)
   price      String         @db.VarChar(255)
-  rate       Int            @db.Integer()
+  rate       Int?           @db.Integer()
   pathImg    String?        @db.VarChar(255)
   devices    BasketDevice[]
   deviceInfo DeviceInfo[]

@@ -7,7 +7,8 @@ import cuid from "cuid";
 export const schema = Type.Object({
   name: Type.String(),
   price: Type.String(),
-  rate: Type.Integer(),
+  rate: Type.Optional(Type.Integer()),
+  staticId: Type.Optional(Type.Integer()),
   type: Type.String(),
   brand: Type.String(),
   image: Type.Optional(Type.String()),
@@ -15,15 +16,18 @@ export const schema = Type.Object({
 
 type Params = Static<typeof schema>;
 
-export default async ({ params }: JsonRpcRequest<Params>, { config, prisma, authorize }: FastifyInstance) => {
+export default async (
+  { params }: JsonRpcRequest<Params>,
+  { config, prisma, authorize }: FastifyInstance
+) => {
   const user = await authorize();
   const { type, brand, image, ...other } = params;
 
-  let pathToImage;
-  const nameImage = cuid();
-  if (image) {
-    pathToImage = await saveImage(image, nameImage, "devices", user.userId);
-  }
+  // let pathToImage;
+  // const nameImage = cuid();
+  // if (image) {
+  //   pathToImage = await saveImage(image, nameImage, "devices", user.userId);
+  // }
 
   const typeDevice = await prisma.type.create({
     data: {
@@ -40,7 +44,7 @@ export default async ({ params }: JsonRpcRequest<Params>, { config, prisma, auth
   const device = await prisma.device.create({
     data: {
       ...other,
-      pathImg: pathToImage,
+      pathImg: params.image,
       devices: {
         create: {
           basket: { connect: { id: user.user.basket.id } },

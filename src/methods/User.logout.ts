@@ -1,6 +1,13 @@
+import { Type, Static } from "@sinclair/typebox";
 import { FastifyInstance } from "fastify";
+import { JsonRpcRequest } from "../plugins/jsonrpc";
+export const schema = Type.Object({});
 
-export default async ({ logout }: FastifyInstance) => {
-  await logout();
-  return true;
+export type Params = Static<typeof schema>;
+export default async (
+  {}: JsonRpcRequest<Params>,
+  { logout }: FastifyInstance
+) => {
+  const result = await logout();
+  return result;
 };

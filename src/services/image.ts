@@ -2,7 +2,12 @@ import sharp from "sharp";
 import { existsSync, mkdirSync } from "fs";
 import path from "path";
 
-export const saveImage = async (imageBase64: string | undefined, name: string, type: string, userId: string) => {
+export const saveImage = async (
+  imageBase64: string,
+  name: string,
+  type: string,
+  userId: string
+) => {
   if (!imageBase64) {
     return null;
   }
@@ -25,7 +30,6 @@ export const saveImage = async (imageBase64: string | undefined, name: string, t
     }
 
     const pathToImage = path.join(pathToType, userId);
-
     if (!existsSync(pathToImage)) {
       mkdirSync(pathToImage);
     }
@@ -42,7 +46,8 @@ export const saveImage = async (imageBase64: string | undefined, name: string, t
       })
       .toFile(`${nameImage}`);
 
-    return nameImage;
+    const test = path.join("users", userId, name) + ".png";
+    return test;
   } catch (e) {
     console.log(e);
   }

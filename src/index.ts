@@ -8,6 +8,8 @@ import router from "./plugins/router";
 import decorators from "./plugins/decorators";
 import authorization from "./plugins/authorization";
 import prisma from "./plugins/prisma";
+import fastifyStatic from "@fastify/static";
+import path from "path";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -26,7 +28,10 @@ app
   .register(authorization)
   .register(jsonrpc)
   .register(redis, config.database.redis)
-  .register(router);
+  .register(router)
+  .register(fastifyStatic, {
+    root: path.join(__dirname, "../public/"),
+  });
 
 app.post("*", async (request: FastifyRequest) => app.router(request));
 
