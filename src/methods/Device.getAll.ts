@@ -25,6 +25,10 @@ export default async (
     where: {
       id: { in: manyDeviceId },
     },
+    include: {
+      brand: true,
+      type: true,
+    },
   });
   return devices;
 };

@@ -57,6 +57,7 @@ model Device {
   name       String         @db.VarChar(255)
   price      String         @db.VarChar(255)
   rate       Int?           @db.Integer()
+  count      Int            @default(1)
   pathImg    String?        @db.VarChar(255)
   devices    BasketDevice[]
   deviceInfo DeviceInfo[]
