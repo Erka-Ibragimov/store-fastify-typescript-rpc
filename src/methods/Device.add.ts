@@ -1,8 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { JsonRpcRequest } from "../plugins/jsonrpc";
 import { Static, Type } from "@sinclair/typebox";
-import { saveImage } from "../services/image";
-import cuid from "cuid";
 
 export const schema = Type.Object({
   name: Type.String(),
@@ -22,12 +20,6 @@ export default async (
 ) => {
   const user = await authorize();
   const { type, brand, image, ...other } = params;
-
-  // let pathToImage;
-  // const nameImage = cuid();
-  // if (image) {
-  //   pathToImage = await saveImage(image, nameImage, "devices", user.userId);
-  // }
 
   const typeDevice = await prisma.type.create({
     data: {
